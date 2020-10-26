@@ -1,0 +1,13 @@
+<form [formGroup]="loginform">
+    Login
+    <div class="name">
+        <label>Username:</label>
+        <input type="text" formControlName="username">
+    </div>
+    <div class="password">
+        <label>Password:</label>
+        <input type="password" formControlName="password">
+    </div>
+    <button type="submit" routerLink="/home">Login</button><br>
+    Didn't have an account?<a routerLink="/signup">signuphere</a>
+</form>

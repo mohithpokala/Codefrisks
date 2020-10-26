@@ -1,0 +1,14 @@
+<input  type="file" multiple="multiple" (change)="onchoose($event.target.files)">
+<button (click)="uploadfile()">Upload</button>
+
+Upload Percent: {{percentDone}}% <br />
+    
+    <ng-container *ngIf="uploadSuccess">
+      Upload Successful
+    </ng-container>
+
+
+    <div>
+        <input type="search" >
+        <input type="button" (click)="downloadfile()" value="Download File"/>
+    </div>

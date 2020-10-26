@@ -1,0 +1,25 @@
+<form [formGroup]="form" (ngSubmit)="registeruser()">
+    <p style="font-size: xx-large;  text-align: center;">SignUp</p>
+    <div class="name">
+        <label>Username:</label>
+        <input type="text" formControlName="username">
+    </div>
+    <div class="email">
+        <label>Email:</label>
+        <input type="text" formControlName="email">
+    </div>
+    <div class="password">
+        <label>Password:</label>
+        <input #p1 type="password" formControlName="password">
+    </div>
+    <div class="password">
+        <label>Confirm Password:</label>
+        <input #p2 type="password" formControlName="password">
+    </div>
+    <p *ngIf="p1.value!=p2.value">The passwords do not match</p>
+    <button type="submit" [disabled]="form.invalid || p1.value!=p2.value">SignUp</button>
+</form>
+
+<ul>
+    <li *ngFor="let user of userlist">{{user|json}}</li>
+</ul>
