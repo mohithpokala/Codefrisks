@@ -1,4 +1,4 @@
-<form [formGroup]="loginform">
+<form [formGroup]="loginform" (ngSubmit)="loginUser()">
     Login
     <div class="name">
         <label>Username:</label>
@@ -8,6 +8,6 @@
         <label>Password:</label>
         <input type="password" formControlName="password">
     </div>
-    <button type="submit" routerLink="/home">Login</button><br>
+    <button type="submit">Login</button><br>
     Didn't have an account?<a routerLink="/signup">signuphere</a>
 </form>

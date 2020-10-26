@@ -3,8 +3,8 @@ import { saveAs } from 'file-saver';
 import { HttpEventType, HttpErrorResponse,HttpResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';  
 import { of } from 'rxjs';
-import { FileUploadService } from '../file-upload.service';
-
+import { UserService } from '../user.service';
+import { FormGroup,FormControl,Validators } from '@angular/forms';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,10 +15,18 @@ export class HomeComponent implements OnInit {
   files:File[];
   percentDone: number;
   uploadSuccess: boolean;
-
-  constructor(private service:FileUploadService) { }
+  file:File;
+  username:string;
+  label:string;
+  form;
+  constructor(private service:UserService) { }
 
   ngOnInit(): void {
+    this.username=this.service.getusername();
+    this.form=new FormGroup({
+      label : new FormControl('',[Validators.required]),
+      file: new FormControl('',[Validators.required])
+    });
   }
 
   onchoose(input:File[]){
@@ -26,23 +34,22 @@ export class HomeComponent implements OnInit {
   }
 
   uploadfile(){
-    this.uploadSuccess=false;
-    for(let file of this.files){
-      this.uploadSuccess=false;
-    this.service.uploadfile(file).subscribe(event => {
-      if (event.type === HttpEventType.UploadProgress) {
-        this.percentDone = Math.round(100 * event.loaded / event.total);
-      } else if (event instanceof HttpResponse) {
-        this.uploadSuccess = true;
+    const uploadData = JSON.stringify(this.form.value);
+    uploadData['username']=this.username;
+    this.service.add_files(uploadData).subscribe(
+      response=>{
+        alert(response);
+      },
+      error=>{
+        alert('failed')
       }
-    },
-    err=>{console.log(err)}
     );
-    }
   }
 
   downloadfile(){
-    this.service.downloadfile().subscribe(response => {
+    const uploadData = new FormData();
+    uploadData.append('username', this.username);
+    this.service.view_files(JSON.stringify(uploadData)).subscribe(response => {
 			let blob:any = new Blob([response], { type: 'application/pdf'});
 			const url = window.URL.createObjectURL(blob);
 			//window.open(url);

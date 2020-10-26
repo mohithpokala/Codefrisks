@@ -17,6 +17,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class DataSerializer(serializers.ModelSerializer):
     class Meta:
         model = add_data
-        fields = ('user','label','file')
+        fields = ('username','label','file')
 
 

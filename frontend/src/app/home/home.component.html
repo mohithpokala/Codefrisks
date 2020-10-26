@@ -1,11 +1,15 @@
-<input  type="file" multiple="multiple" (change)="onchoose($event.target.files)">
-<button (click)="uploadfile()">Upload</button>
-
-Upload Percent: {{percentDone}}% <br />
-    
-    <ng-container *ngIf="uploadSuccess">
-      Upload Successful
-    </ng-container>
+<form [formGroup]="form" (ngSubmit)="uploadfile()">
+  <p style="font-size: xx-large;  text-align: center;">Upload file</p>
+  <div class="name">
+      <label>Label</label>
+      <input type="text" formControlName="label">
+  </div>
+  <div class="file">
+      <label>File</label>
+      <input type="file" formControlName="file">
+  </div>
+  <button type="submit" [disabled]="form.invalid">Upload</button>
+</form>
 
 
     <div>
