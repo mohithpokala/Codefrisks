@@ -17,4 +17,5 @@ k-gram is contagious substring of length k.
 
 References:
 http://theory.stanford.edu/~aiken/publications/papers/sigmod03.pdf
+
 https://www.matec-conferences.org/articles/matecconf/pdf/2017/42/matecconf_eitce2017_02019.pdf
