@@ -10,6 +10,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('auth/', ObtainAuthToken.as_view()),
     path('users/',views.create_user),
-    path('add_file/',views.DataUpload.upload),
+    path('add_file/',views.DataUpload.post),
     path('view_files/',views.DataUpload.view_files)
 ]

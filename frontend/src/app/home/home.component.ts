@@ -15,37 +15,53 @@ export class HomeComponent implements OnInit {
   files:File[];
   percentDone: number;
   uploadSuccess: boolean;
-  file:File;
+  yourfile:File;
   username:string;
   label:string;
   form;
   constructor(private service:UserService) { }
 
   ngOnInit(): void {
-    this.username=this.service.getusername();
+    
+    try{
+      this.username=sessionStorage.getItem('username');
+    }
+    catch(err){
+      location.replace("http://localhost:4200/login");
+    }
+
+    if(this.username==''){
+      location.replace("http://localhost:4200/login");
+    }
     this.form=new FormGroup({
       label : new FormControl('',[Validators.required]),
-      file: new FormControl('',[Validators.required])
+      file: new FormControl('',[Validators.required]),
+      username: new FormControl(this.username,[])
     });
   }
 
-  onchoose(input:File[]){
-    this.files=input;
+  
+  onChange(event) {
+    if (event.target.files.length > 0) {
+      this.yourfile=event.target.files[0];
+    }
   }
 
-  uploadfile(){
-    const uploadData = JSON.stringify(this.form.value);
-    uploadData['username']=this.username;
-    this.service.add_files(uploadData).subscribe(
-      response=>{
+  uploadfile() {
+    const formData = new FormData();
+    formData.append('username', this.form.get('username').value);
+    formData.append('label', this.form.get('label').value);
+    formData.append('data', this.yourfile,this.yourfile.name);
+
+    this.service.add_files(formData).subscribe(
+      response => {
         alert(response);
       },
-      error=>{
-        alert('failed')
+      error => {  
+        alert("fail");
       }
     );
   }
-
   downloadfile(){
     const uploadData = new FormData();
     uploadData.append('username', this.username);

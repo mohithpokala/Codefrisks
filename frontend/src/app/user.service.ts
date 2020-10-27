@@ -13,10 +13,10 @@ export class UserService {
   temp:string;
   private options;
   username:string;
-
+  
   private registerurl='http://127.0.0.1:8000/backend/users/';
   private authurl='http://127.0.0.1:8000/backend/auth/';
-  private addfiles='http://127.0.0.1:8000/backend/add_files/';
+  private addfiles='http://127.0.0.1:8000/backend/add_file/';
   private viewfiles='http://127.0.0.1:8000/backend/view_files/';
   private 
   httpOptions = {
@@ -25,12 +25,6 @@ export class UserService {
   
   constructor(private http: HttpClient) { }
 
-  setusername(data):void{
-    this.username=data;
-  }
-  getusername():string{
-    return this.username;
-  }
   registeruser(data):Observable<any>{
     console.log(data);
     return this.http.post<any>(this.registerurl,data);
@@ -43,17 +37,19 @@ export class UserService {
     this.token='';
   }
   loginuser(data):Observable<any>{
+    console.log(data);
     return this.http.post<any>(this.authurl,data,this.httpOptions);
   }
-  add_files(data):Observable<any>{
-    this.temp='Token'+this.token;
+  add_files(x):Observable<any>{
+    this.temp='Token '+sessionStorage.getItem('token');
+    console.log(this.temp);
     this.options= {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' ,'Authorization':this.temp})
+      headers: new HttpHeaders({'Authorization':this.temp})
     };
-    return this.http.post<any>(this.addfiles,data,this.options);
+    return this.http.post<any>(this.addfiles,x,this.options);
   }
   view_files(data):Observable<any>{
-    this.temp='Token '+this.token;
+    this.temp='Token '+sessionStorage.getItem('token');
     this.options= {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' ,'Authorization':this.temp})
     };

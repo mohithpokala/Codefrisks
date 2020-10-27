@@ -24,10 +24,13 @@ export class LoginComponent implements OnInit {
     this.userservice.loginuser(JSON.stringify(this.loginform.value)).subscribe(
       response=>{
           alert("success");
-          this.userservice.settoken(response['token']);
-          this.userservice.setusername(JSON.stringify(this.loginform.value)['username']);
+          sessionStorage.setItem('token', response['token']);
+          sessionStorage.setItem('username', this.loginform.get('username').value);
+          location.replace("http://localhost:4200/home");
       },
       error=>{
+        sessionStorage.setItem('token', '');
+          sessionStorage.setItem('username', '');
           alert("incorrect credentials");
       }
     );

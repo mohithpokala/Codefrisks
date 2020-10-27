@@ -1,18 +1,23 @@
 <form [formGroup]="form" (ngSubmit)="uploadfile()">
-  <p style="font-size: xx-large;  text-align: center;">Upload file</p>
-  <div class="name">
-      <label>Label</label>
-      <input type="text" formControlName="label">
-  </div>
-  <div class="file">
-      <label>File</label>
-      <input type="file" formControlName="file">
-  </div>
-  <button type="submit" [disabled]="form.invalid">Upload</button>
-</form>
-
-
-    <div>
-        <input type="search" >
-        <input type="button" (click)="downloadfile()" value="Download File"/>
+    <p style="font-size: xx-large;  text-align: center;">Upload file</p>
+    <div class="name">
+        <label>Upload as {{username}}</label>
+        <input type="text" formControlName="username" value={{username}} disabled>
     </div>
+    <div class="name">
+        <label>Label</label>
+        <input type="text" formControlName="label">
+    </div>
+    <div class="file">
+        <label>File</label>
+        <input type="file" formControlName="file" (change)="onChange($event)">
+    </div>
+    <button type="submit" [disabled]="form.invalid">Upload</button>
+  </form>
+  
+      <div>
+          {{form.get('file').value}}
+          <input type="search" >
+          <input type="button" (click)="downloadfile()" value="Download File"/>
+      </div>
+  

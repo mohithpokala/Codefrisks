@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.parsers import FileUploadParser
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('username')
@@ -40,11 +41,20 @@ def create_user(request):
 class DataUpload(viewsets.ModelViewSet):
     authentication_classes=(TokenAuthentication,)
     permission_classes=(IsAuthenticated,)
-    
-    def upload(request):
-        data=request.POST
-        data_serializer = DataSerializer(data=data)
+    serializer_class = DataSerializer
+    @csrf_exempt
+    def post(request, *args, **kwargs):
+            data=request.POST
+            label = data['label']
+            username = data['username']
+            your_file = data['data']
+            add_data.objects.create( username=username,label=label,data=your_file)
+            return JsonResponse("success",safe=False)
+        
+    def upload(self,request):
+        data_serializer = DataSerializer(data=request)
         if data_serializer.is_valid():
+            print(data_serializer,request)
             data_serializer.save()
             return JsonResponse("Added Successfully!!" , safe=False)
         return JsonResponse("Failed to Add.",safe=False)
