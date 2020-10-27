@@ -19,9 +19,21 @@ export class LoginComponent implements OnInit {
       username : new FormControl('',[Validators.required]),
       password: new FormControl('',[Validators.required])
     });
-  }
-  loginuser(){
-    this.userservice.loginuser(this.loginform.value)
+  }  
+  loginUser(){
+    this.userservice.loginuser(JSON.stringify(this.loginform.value)).subscribe(
+      response=>{
+          alert("success");
+          sessionStorage.setItem('token', response['token']);
+          sessionStorage.setItem('username', this.loginform.get('username').value);
+          location.replace("http://localhost:4200/home");
+      },
+      error=>{
+        sessionStorage.setItem('token', '');
+          sessionStorage.setItem('username', '');
+          alert("incorrect credentials");
+      }
+    );
   }
 
 }
