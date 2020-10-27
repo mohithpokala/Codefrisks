@@ -1,22 +1,26 @@
-<form [formGroup]="form" (ngSubmit)="registeruser()">
-    <p style="font-size: xx-large;  text-align: center;">SignUp</p>
-    <div class="name">
-        <label>Username:</label>
-        <input type="text" formControlName="username">
-    </div>
-    <div class="email">
-        <label>Email:</label>
-        <input type="text" formControlName="email">
-    </div>
-    <div class="password">
-        <label>Password:</label>
-        <input #p1 type="password" formControlName="password">
-    </div>
-    <div class="password">
-        <label>Confirm Password:</label>
-        <input #p2 type="password" formControlName="password2">
+<form [formGroup]="form" (ngSubmit)="registeruser()" style="background-image: url('../bg1.jpg');">
+
+    <p style="font-size: xx-large;  text-align: center; color:red; font-weight: 700;">SignUp</p>
+    <div class="table-borderless" style="border-spacing:10px 15px; font-size: large; color: violet;">
+    <tr>
+        <th>Username:</th>
+    <th><input type="text" formControlName="username"></th>
+    </tr>
+    <tr>
+    <th>Email:</th>
+<th><input type="text" formControlName="email"></th>
+    </tr>
+    <tr>
+        <th>Password:</th>
+    <th><input #p1 type="password" formControlName="password"></th>
+    </tr>
+    <tr>
+    <th>Confirm Password:</th>
+<th><input #p2 type="password" formControlName="password"></th>
+    </tr>
     </div>
     <p *ngIf="p1.value!=p2.value">The passwords do not match</p>
-    <button type="submit" [disabled]="form.invalid || p1.value!=p2.value">SignUp</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid || p1.value!=p2.value">SignUp</button>
+
 </form>
-<p>{{form.value | json}}</p>
+

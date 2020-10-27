@@ -1,19 +1,38 @@
-<div>
-  <label>
-    Title:
-    <input type="text" (change)="onTitleChanged($event)" />
-  </label>
-  <br/>
-  <label>
-    file:
-    <input type="file" (change)="onImageChanged($event)" />
-  </label>
-  <br/>
-  <button (click)="uploadfile()">New Book</button>
-  
-      <div>
-          <input type="search" >
-          <input type="button" (click)="downloadfile()" value="Download File"/>
-      </div>
+<nav>
+  <a routerLink="/changepassword" >ChangePassword</a>
+</nav>
 
+<div class="upload" style="text-align: center;">
+  <h2>
+  <p>Upload File</p>
+</h2>
+  <input  type="file" multiple="multiple" (change)="onchoose($event.target.files)" style="color: orange"><br>
+  <button (click)="uploadfile()">Upload</button>
+<h3 style="padding-top: 10px;">
+  <p style="font-size:medium">Upload Percent</p>
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar"
+    aria-valuenow="percentDone" aria-valuemin="0" aria-valuemax="100" [style.width.%]="percentDone">
+    {{percentDone}}%
+    </div>
+  </div>
+</h3>
+
+  <ng-container *ngIf="uploadSuccess">
+    <div class="alert alert-success" role="alert">
+    Upload Successful
+  </div>
+  </ng-container>
+
+</div>
+
+
+<div class="Download">
+ <h2>
+  <p>Download File</p>
+</h2>
+  <select #selectedfile>
+    <option value="" >- select -</option>
+  </select>
+  <button  (click)="downloadfile()">Download</button>
 </div>

@@ -9,26 +9,22 @@ import { UserService } from '../user.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  form;
+  form:FormGroup;
+  userlist:User[]=[];
+  success:boolean=false;
   constructor(private userservice:UserService) { }
-  
+
   ngOnInit(): void {
     this.form=new FormGroup({
       username : new FormControl('',[Validators.required]),
       email: new FormControl('',[Validators.required,Validators.email]),
-      password: new FormControl('',[Validators.required]),
-      password2: new FormControl('',[Validators.required])
+      password: new FormControl('',[Validators.required])
     });
 
   }
 
- 
   registeruser(){
-    this.userservice.registeruser(JSON.stringify(this.form.value)).subscribe(
-      response=>{
-        alert(response);
-      }
-    );
+    this.userservice.registeruser(this.form.value).subscribe(user=>this.userlist.push(user))
   }
 
 }

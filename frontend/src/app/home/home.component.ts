@@ -3,8 +3,8 @@ import { saveAs } from 'file-saver';
 import { HttpEventType, HttpErrorResponse,HttpResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';  
 import { of } from 'rxjs';
-import { UserService } from '../user.service';
-import { FormGroup,FormControl,Validators } from '@angular/forms';
+import { FileUploadService } from '../file-upload.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,68 +15,39 @@ export class HomeComponent implements OnInit {
   files:File[];
   percentDone: number;
   uploadSuccess: boolean;
-  your_file:File;
-  title:string;
-  username:string;
-  valid:boolean;
-  constructor(private service:UserService) { }
+
+  constructor(private service:FileUploadService) { }
 
   ngOnInit(): void {
-    
-    try{
-      this.username=sessionStorage.getItem('username');
-    }
-    catch(err){
-      location.replace("http://localhost:4200/login");
-    }
-
-    if(this.username==null){
-      location.replace("http://localhost:4200/login");
-    }
-    this.valid=true;
   }
 
-  onTitleChanged(event: any) {
-    this.title = event.target.value;
+  onchoose(input:File[]){
+    this.files=input;
   }
 
-  onImageChanged(event: any) {
-    this.your_file = event.target.files[0];
-  }
-
-  uploadfile() {
-    const uploadData = new FormData();
-    uploadData.append('username',this.username);
-    uploadData.append('label', this.title);
-    uploadData.append('data', this.your_file,this.your_file.name);
-    this.service.add_files(uploadData).subscribe(
-      response => {
-        alert(response);
-      },
-      error => {  
-        alert("fail");
+  uploadfile(){
+    this.uploadSuccess=false;
+    for(let file of this.files){
+      this.uploadSuccess=false;
+    this.service.uploadfile(file).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.percentDone = Math.round(100 * event.loaded / event.total);
+      } else if (event instanceof HttpResponse) {
+        this.uploadSuccess = true;
       }
+    },
+    err=>{console.log(err)}
     );
+    }
   }
-  
+
   downloadfile(){
-    const uploadData = new FormData();
-    uploadData.append('username', this.username);
-    this.service.view_files(uploadData).subscribe(response => {
-      var i;
-      for(i=0;i<response.length;i++){
-        console.log(i);
-        let blob:any = new Blob([response[i]['data']], { type: 'application/txt'});
-        const url = window.URL.createObjectURL(blob);
-        var x=response[i]['label']
-        saveAs(blob, x);
-      }
-      console.log(response['data']);
-			let blob:any = new Blob([response], { type: 'application/txt'});
+    this.service.downloadfile().subscribe(response => {
+			let blob:any = new Blob([response], { type: 'application/pdf'});
 			const url = window.URL.createObjectURL(blob);
 			//window.open(url);
 			//window.location.href = response.url;
-      
+      saveAs(blob, 'test.pdf');
       setTimeout(function () {
         // For Firefox it is necessary to delay revoking the ObjectURL
         window.URL.revokeObjectURL(url);
