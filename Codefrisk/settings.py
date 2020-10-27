@@ -32,7 +32,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'backend.apps.BackendConfig'
 ]
-CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL=False
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200'
+]
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
