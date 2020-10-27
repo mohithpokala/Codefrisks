@@ -51,7 +51,7 @@ export class UserService {
   view_files(data):Observable<any>{
     this.temp='Token '+sessionStorage.getItem('token');
     this.options= {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' ,'Authorization':this.temp})
+      headers: new HttpHeaders({'Authorization':this.temp})
     };
     return this.http.post<any>(this.viewfiles,data,this.options);
   }

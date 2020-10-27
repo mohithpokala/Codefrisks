@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('username')
@@ -41,27 +41,22 @@ def create_user(request):
 class DataUpload(viewsets.ModelViewSet):
     authentication_classes=(TokenAuthentication,)
     permission_classes=(IsAuthenticated,)
+    parser_classes = (MultiPartParser, FormParser)
     serializer_class = DataSerializer
     @csrf_exempt
     def post(request, *args, **kwargs):
-            data=request.POST
-            label = data['label']
-            username = data['username']
-            your_file = data['data']
-            add_data.objects.create( username=username,label=label,data=your_file)
-            return JsonResponse("success",safe=False)
-        
-    def upload(self,request):
-        data_serializer = DataSerializer(data=request)
-        if data_serializer.is_valid():
-            print(data_serializer,request)
-            data_serializer.save()
-            return JsonResponse("Added Successfully!!" , safe=False)
-        return JsonResponse("Failed to Add.",safe=False)
+        label=request.POST['label']
+        username=request.POST['username']
+        your_file = request.FILES['data']
+        add_data.objects.create( username=username,label=label,data=your_file)
+        return JsonResponse("success",safe=False)
+ 
+    @csrf_exempt
     def view_files(request):
-        data = request.GET
-        your_files=add_data.objects.get(username=data['username'])
-        data_serializer = DataSerializer(your_files, many=True)
-        return JsonResponse(data_serializer.data, safe=False)
+        data = request.POST
+        your_files=add_data.objects.filter(username=data['username'])
+        serializer = DataSerializer(your_files, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
 
     
