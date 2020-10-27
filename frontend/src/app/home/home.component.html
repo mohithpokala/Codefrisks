@@ -6,7 +6,11 @@
   <h2>
   <p>Upload File</p>
 </h2>
-  <input  type="file" multiple="multiple" (change)="onchoose($event.target.files)" style="color: orange"><br>
+  <label>
+    Title:
+    <input type="text" (change)="onTitleChanged($event)" />
+  </label>
+  <input  type="file" multiple="multiple" (change)="onImageChanged($event.target.files)" style="color: orange"><br>
   <button (click)="uploadfile()">Upload</button>
 <h3 style="padding-top: 10px;">
   <p style="font-size:medium">Upload Percent</p>
