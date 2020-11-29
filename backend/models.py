@@ -6,4 +6,4 @@ class add_data(models.Model):
     label = models.CharField(max_length=50)
     data = models.FileField()
     def __str__(self):
-        return self.label
+        return self.data.name
