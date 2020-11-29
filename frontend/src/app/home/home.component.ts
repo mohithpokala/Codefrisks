@@ -44,7 +44,11 @@ export class HomeComponent implements OnInit {
   onImageChanged(event: any) {
     this.your_file = event.target.files[0];
   }
-  
+  logout(){
+    sessionStorage.setItem('token', '');
+    sessionStorage.setItem('username', '');
+    location.replace("http://localhost:4200/login");
+  }
   uploadfile() {
     const uploadData = new FormData();
     uploadData.append('username',this.username);
@@ -76,8 +80,8 @@ export class HomeComponent implements OnInit {
                       const file = new File([blob], x + '.txt', { type: 'application/txt' });
                       saveAs(file);
                   },
-                  res => {
-                      // notify error
+                  error => {
+                      console.log("failed");
                   }
               );
               
