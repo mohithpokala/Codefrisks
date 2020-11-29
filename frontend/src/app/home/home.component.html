@@ -1,8 +1,5 @@
-<nav>
-  <a routerLink="/changepassword" >ChangePassword</a>
-</nav>
-
-<div class="upload" style="text-align: center;">
+<button (click)="Logout()">Logout</button>
+<div class="upload" *ngIf="valid" style="text-align: center;">
   <h2>
   <p>Upload File</p>
 </h2>
@@ -10,7 +7,7 @@
     Title:
     <input type="text" (change)="onTitleChanged($event)" />
   </label>
-  <input  type="file" multiple="multiple" (change)="onImageChanged($event.target.files)" style="color: orange"><br>
+  <input  type="file" multiple="multiple" (change)="onImageChanged($event)" style="color: orange"><br>
   <button (click)="uploadfile()">Upload</button>
 <h3 style="padding-top: 10px;">
   <p style="font-size:medium">Upload Percent</p>
@@ -31,12 +28,13 @@
 </div>
 
 
-<div class="Download">
+<div *ngIf="valid" class="Download">
  <h2>
   <p>Download File</p>
 </h2>
   <select #selectedfile>
     <option value="" >- select -</option>
   </select>
-  <button  (click)="downloadfile()">Download</button>
+  <input type="search" >
+  <button  (click)="downloadfile()" value="Download File">Download</button>
 </div>
