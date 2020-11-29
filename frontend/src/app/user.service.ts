@@ -9,29 +9,49 @@ import { User } from './user';
   providedIn: 'root'
 })
 export class UserService {
-
+  token:string;
+  temp:string;
+  private options;
+  username:string;
+  isValid:boolean;
   private registerurl='http://127.0.0.1:8000/backend/users/';
   private authurl='http://127.0.0.1:8000/backend/auth/';
-  isValid:boolean;
+  private addfiles='http://127.0.0.1:8000/backend/add_file/';
+  private viewfiles='http://127.0.0.1:8000/backend/view_files/';
+  private 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
+  
   constructor(private http: HttpClient) { }
 
-  registeruser(user:User):Observable<User>{
-    var formData = new FormData();
-    formData.append('username',user.username);
-    formData.append('password',user.password);
-    formData.append('email',user.email);
-    return this.http.post<User>(this.registerurl,formData,this.httpOptions);
+  registeruser(data):Observable<any>{
+    console.log(data);
+    return this.http.post<any>(this.registerurl,data);
+  }
+  settoken(data):void{
+    this.token=data;
   }
 
-  loginuser(user:{username:string,password:string}):Observable<any>{
-    this.isValid=true;
-    var formData = new FormData();
-    formData.append('username',user.username);
-    formData.append('password',user.password);
-    return this.http.post<any>(this.authurl,formData,this.httpOptions);
+  removetoken():void{
+    this.token='';
   }
-
+  loginuser(data):Observable<any>{
+    console.log(data);
+    return this.http.post<any>(this.authurl,data,this.httpOptions);
+  }
+  add_files(x):Observable<any>{
+    this.temp='Token '+sessionStorage.getItem('token');
+    this.options= {
+      headers: new HttpHeaders({'Authorization':this.temp})
+    };
+    return this.http.post<any>(this.addfiles,x,this.options);
+  }
+  view_files(data):Observable<any>{
+    this.temp='Token '+sessionStorage.getItem('token');
+    this.options= {
+      headers: new HttpHeaders({'Authorization':this.temp})
+    };
+    return this.http.post<any>(this.viewfiles,data,this.options);
+  }
 }
