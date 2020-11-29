@@ -17,6 +17,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 @csrf_exempt
+@csrf_exempt
 def create_user(request):
     validated_data=JSONParser().parse(request)
     if(validated_data['password']!=validated_data['password2']):
@@ -32,12 +33,13 @@ def create_user(request):
             new_data['password']=validated_data['password']
             new_data['email']=validated_data['email']
         except:
-            return JsonResponse("here",safe=False)
+            return JsonResponse("failed",safe=False)
         user_serializer=UserSerializer(data=new_data)
         if user_serializer.is_valid():
             user_serializer.save()
             return JsonResponse("success",safe=False)
         return JsonResponse("Invalid credentials",safe=False)
+
 class DataUpload(viewsets.ModelViewSet):
     authentication_classes=(TokenAuthentication,)
     permission_classes=(IsAuthenticated,)
@@ -55,6 +57,8 @@ class DataUpload(viewsets.ModelViewSet):
     def view_files(request):
         data = request.POST
         your_files=add_data.objects.filter(username=data['username'])
+        if(not your_files.exists()):
+            return JsonResponse("You dont have any files",safe=False)
         serializer = DataSerializer(your_files, many=True)
         return JsonResponse(serializer.data, safe=False)
 
